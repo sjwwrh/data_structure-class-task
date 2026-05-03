@@ -1,6 +1,8 @@
 #ifndef SEQLIST_H
 #define SEQLIST_H
 
+#include "exception.h"
+
 //以第一个元素为哨兵
 template <typename T>
 class seq_list {
@@ -14,7 +16,7 @@ public:
     seq_list(int size = INITSIZE) {
         elem = new T[size];
         if (!elem) {
-            throw std::bad_alloc();
+            throw bad_alloc();
         }
         len = 0;
         capacity = size - 1;
@@ -26,7 +28,7 @@ public:
 
     T get(int i) const {
         if (i < 1 || i > len) {
-            throw std::out_of_range();
+            throw out_of_range();
         }
         return elem[i];
     }
@@ -39,7 +41,7 @@ public:
 
     void insert(int i, const T& val) {
         if (i < 1 || i > len + 1) {
-            throw std::out_of_range();
+            throw out_of_range();
         }
 
        if (len == capacity) {
@@ -56,7 +58,7 @@ public:
 
     void remove(int i) {
         if (i < 1 || i > len) {
-            throw std::out_of_range();
+            throw out_of_range();
         }
         for (int cur = i; i < len; i++) {
             elem[i] = elem[i + 1];
@@ -86,12 +88,13 @@ private:
         int max_size = static_cast<size_t>(-1) / sizeof(T);
         int new_size = max_size > 2 * capacity ? 2 * capacity : max_size;
 
-        delete[] elem;
-        elem = new T[new_size];
+        
+        T* new_elem = new T[new_size];
         if (!elem) {
-            throw std::bad_alloc();
+            throw bad_alloc();
         }
-
+        delete[] elem;
+        elem = new_elem;
         capacity = new_size;
     }
 

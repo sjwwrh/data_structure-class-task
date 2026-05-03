@@ -30,7 +30,7 @@ public:
     bool remove(int pos, int n);
 };
 
-sstring::sstring(int size = INITSIZE) : str(nullptr), capacity() {
+sstring::sstring(int size) : str(nullptr), capacity() {
     if (size <= 0) {
         throw illegal_size();
     }

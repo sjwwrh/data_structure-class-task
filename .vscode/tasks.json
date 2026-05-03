@@ -7,7 +7,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\algorithm_and_structure\\*.cpp",
+                "${workspaceFolder}\\algorithm_and_structure\\src\\*.cpp",
                 "-I", "${workspaceFolder}",
                 "-I", "${workspaceFolder}\\algorithm_and_structure\\include",
                 "-o",
