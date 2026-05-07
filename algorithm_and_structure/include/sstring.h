@@ -2,6 +2,7 @@
 #define SSTRING_H
 
 #include "exception.h"
+#include <iostream>
 
 class sstring {
     friend int* next_value(const sstring& str, int len); //for kmp_find
@@ -12,7 +13,7 @@ private:
 
     static constexpr int INITSIZE = 100;
 public:
-    sstring(int size = INITSIZE);
+    explicit sstring(int size = INITSIZE);
     sstring(const char* _str);
     sstring(const sstring& other);
     ~sstring() {
@@ -28,6 +29,23 @@ public:
     int KMP_find(const sstring& substr, int start) const;
     bool insert(int pos, const sstring& insert_str);
     bool remove(int pos, int n);
+    int to_number() const noexcept;
+
+    bool operator==(const sstring& other) const noexcept {
+        return equal(other);
+    }
+    bool operator!=(const sstring& other) const noexcept {
+        return !operator==(other);
+    }
+    bool operator==(const char* _str) const noexcept;
+    bool operator!=(const char* _str) const noexcept {
+        return !operator==(_str);
+    }
+    sstring& operator=(const sstring& other);
+    sstring& operator=(const char* _str);
+    char operator[](int i) const;
+
+    friend std::ostream& operator<<(std::ostream& os, const sstring& s);
 };
 
 sstring::sstring(int size) : str(nullptr), capacity() {
@@ -108,6 +126,7 @@ void sstring::assign(const sstring& other) {
     for (int i = 0; i < len; i++) {
         str[i] = other.str[i];
     }
+    str[len] = '\0';
 }
 
 sstring sstring::substring(int pos, int len) const {
@@ -210,6 +229,81 @@ int* next_value(const sstring& pattern, int len) {
         }
     }
     return next;
+}
+
+bool sstring::operator==(const char* _str) const noexcept {
+    int index = 0;
+    while (str[index] != '\0' && _str[index] != '\0') {
+        if (str[index] != _str[index]) {
+            return false;
+        }
+        index++;
+    }
+    if (str[index] != _str[index]) {
+        return false;
+    }
+    return true;
+}
+
+sstring& sstring::operator=(const sstring& other) {
+    assign(other);
+    return *this;
+}
+
+sstring& sstring::operator=(const char* _str) {
+    int len = 0;
+    while (_str[len] != '\0') {
+        len++;
+    }
+
+    if (length() <= len) {
+        delete[] str;
+        capacity = len + 1;
+        str = new char[capacity];
+        if (!str) {
+            throw bad_alloc();
+        }
+    }
+
+    for (int i = 0; i < len; i++) {
+        str[i] = _str[i];
+    }
+    str[len] = '\0';
+    return *this;
+}
+
+char sstring::operator[](int i) const {
+    if (i >= length()) {
+        throw out_of_range();
+    }
+
+    return str[i];
+}
+
+
+//ffffffffffffffffffff
+// sstring to_sstring(int num) {
+   
+// }
+
+int sstring::to_number() const noexcept {
+    int res = 0;
+    int index = 0;
+    while (str[index] != '\0') {
+        int cur_bit = static_cast<int>(str[index] - '0');
+        res = 10 * res + cur_bit;
+        index++;
+    }
+    return res;
+}
+
+std::ostream& operator<<(std::ostream& os, const sstring& s) {
+    int index = 0;
+    while (s.str[index] != '\0') {
+        os << s.str[index];
+        index++;
+    }
+    return os;
 }
 
 

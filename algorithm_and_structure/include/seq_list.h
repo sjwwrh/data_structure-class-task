@@ -35,7 +35,8 @@ public:
 
     int find(const T& val) const {
         elem[0] = val;
-        for (int i = len; elem[i] != val; i--) { }
+        int i = 0;
+        for (i = len; elem[i] != val; i--) { }
         return i;
     }
 
@@ -55,6 +56,14 @@ public:
        len++;
     }
 
+    void push_back(const T& val) {
+        if (len == capacity) {
+            doubleSpace();
+        }
+
+        elem[len + 1] = val;
+        len++;
+    }
 
     void remove(int i) {
         if (i < 1 || i > len) {
@@ -83,6 +92,19 @@ public:
         return len;
     }
 
+    T& operator[](int i) {
+        if (i < 1 || i > len) {
+            throw out_of_range();
+        }
+        return elem[i];
+    }
+    const T& operator[](int i) const {
+        if (i < 1 || i > len) {
+            throw out_of_range();
+        }
+        return elem[i];
+    }
+
 private:
     void doubleSpace() {
         int max_size = static_cast<size_t>(-1) / sizeof(T);
@@ -90,7 +112,7 @@ private:
 
         
         T* new_elem = new T[new_size];
-        if (!elem) {
+        if (!new_elem) {
             throw bad_alloc();
         }
         delete[] elem;
@@ -99,5 +121,6 @@ private:
     }
 
 };
+
 
 #endif //SEQLIST_H
