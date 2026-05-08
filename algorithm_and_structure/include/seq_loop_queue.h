@@ -72,9 +72,15 @@ void seq_loop_queue<T>::double_space() {
     if (!array) {
         throw bad_alloc();
     }
+
+    int i = 0;
+    for (i = 0; i < capacity; i++) {
+        new_array[i] = array[(out + i) % capacity];
+    }
     delete[] array;
     array = new_array;
     capacity = new_size;
+    in = (out + i) % capacity;
 }
 
 

@@ -75,6 +75,9 @@ void seq_stack<T>::double_space() {
     if (!new_p) {
         throw bad_alloc();
     }
+    for (int i = 0; i <= _top; i++) {
+        new_p[i] = p[i];
+    }
     delete[] p;
     p = new_p;
     max_size = new_size;

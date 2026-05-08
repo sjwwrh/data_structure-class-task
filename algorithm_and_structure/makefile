@@ -16,10 +16,16 @@ workspace/%.exe : obj/%.o
 	@g++ $< -o $@
 
 run1 : workspace/parenthesis_match.exe
-	./$^
+	@./$^
+
+run2 : workspace/postfix_notation.exe
+	@./$^
+
+run3 : workspace/expression_tree.exe
+	@./$^
 
 run_test : workspace/test.exe
-	./$^
+	@./$^
 
 debug:
 	@printf "%s\n%s\n" $(src_cpp) $(obj_o) 
@@ -28,4 +34,4 @@ clean:
 	@rm -f obj/*.o
 	@rm -f workspace/*.exe
 
-.PHONY : clean debug
+.PHONY : clean debug run_test run1 run2 run3

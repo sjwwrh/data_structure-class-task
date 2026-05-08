@@ -115,6 +115,9 @@ private:
         if (!new_elem) {
             throw bad_alloc();
         }
+        for (int i = 1; i <= capacity; i++) {
+            new_elem[i] = elem[i];
+        }
         delete[] elem;
         elem = new_elem;
         capacity = new_size;
